@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>料金計算</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin-bottom: 60px;
+        }
+        div {
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+        input[type="number"], select {
+            width: calc(50% - 10px);
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        p {
+            margin: 0;
+            font-size: 18px;
+        }
+        label {
+            font-size: 16px;
+        }
+        #plan-options div {
+            margin-bottom: 10px;
+        }
+        .shopflex {
+            display: flex;
+            align-items: center;
+        }
+        #total {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p>入館時間</p>
+        <div class="shopflex">
+            <select name="entershop-hour" id="entershop-hour">
+                <option value="17">17</option>
+                <option value="18" selected>18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+            </select>
+            <input type="number" name="entershop-minute" id="entershop-minute" min="0" max="59" placeholder="0">
+        </div>
+    </div>
+    <div>
+        <p>出館時間</p>
+        <div class="shopflex">
+            <select name="leavestore-hour" id="leavestore-hour">
+                <option value="17">17</option>
+                <option value="18" selected>18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+            </select>
+            <input type="number" name="leavestore-minute" id="leavestore-minute" min="0" max="59" placeholder="0">
+        </div>
+    </div>
+    <div>
+        <button onclick="generatePlanOptions()">入、出館時間入力してクリック</button>
+    </div>
+    <div id="plan-options">
+        <!-- プランオプションがここに生成されます -->
+    </div>
+    <div>
+        <p>注文</p>
+    </div>
+    <div class="shopflex">
+        <input type="number" name="order1-price" id="order1-price" placeholder="価格">
+        <input type="number" name="order1-count" id="order1-count" placeholder="数量">
+    </div>
+    <div class="shopflex">
+        <input type="number" name="order2-price" id="order2-price" placeholder="価格">
+        <input type="number" name="order2-count" id="order2-count" placeholder="数量">
+    </div>
+    <div class="shopflex">
+        <input type="number" name="order3-price" id="order3-price" placeholder="価格">
+        <input type="number" name="order3-count" id="order3-count" placeholder="数量">
+    </div>
+    <div class="shopflex">
+        <input type="number" name="order4-price" id="order4-price" placeholder="価格">
+        <input type="number" name="order4-count" id="order4-count" placeholder="数量">
+    </div>
+    <div class="shopflex">
+        <input type="number" name="order5-price" id="order5-price" placeholder="価格">
+        <input type="number" name="order5-count" id="order5-count" placeholder="数量">
+    </div>
+    <div class="shopflex">
+        <input type="number" name="order6-price" id="order6-price" placeholder="価格">
+        <input type="number" name="order6-count" id="order6-count" placeholder="数量">
+    </div>
+    <div class="shopflex">
+        <input type="number" name="order7-price" id="order7-price" placeholder="価格">
+        <input type="number" name="order7-count" id="order7-count" placeholder="数量">
+    </div>
+    <div class="shopflex">
+        <input type="number" name="order8-price" id="order8-price" placeholder="価格">
+        <input type="number" name="order8-count" id="order8-count" placeholder="数量">
+    </div>
+    <div class="shopflex">
+        <input type="number" name="order9-price" id="order9-price" placeholder="価格">
+        <input type="number" name="order9-count" id="order9-count" placeholder="数量">
+    </div>
+    <div class="shopflex">
+        <input type="number" name="order10-price" id="order10-price" placeholder="価格">
+        <input type="number" name="order10-count" id="order10-count" placeholder="数量">
+    </div>
+    <div>
+        <button onclick="calculateTotal()">総額計算</button>
+    </div>
+    <div>
+        <p id="total">総額: 0円</p>
+    </div>
+    <div>
+        <button onclick="resetForm()">リセット</button>
+    </div>
+    <script>
+        function generatePlanOptions() {
+            const enterHour = parseInt(document.getElementById('entershop-hour').value);
+            let enterMinute = parseInt(document.getElementById('entershop-minute').value);
+            const leaveHour = parseInt(document.getElementById('leavestore-hour').value);
+            let leaveMinute = parseInt(document.getElementById('leavestore-minute').value);
+
+            if (isNaN(enterHour)) {
+                alert('入館時間の時を入力してください');
+                return;
+            }
+            if (isNaN(enterMinute)) {
+                enterMinute = 0;
+            }
+            if (isNaN(leaveHour)) {
+                alert('出館時間の時を入力してください');
+                return;
+            }
+            if (isNaN(leaveMinute)) {
+                leaveMinute = 0;
+            }
+
+            const enterTime = enterHour * 60 + enterMinute;
+            const leaveTime = leaveHour * 60 + leaveMinute;
+            const duration = (leaveTime - enterTime) / 60;
+
+            if (duration <= 0) {
+                alert('出館時間は入館時間より後でなければなりません');
+                return;
+            }
+
+            const planOptionsDiv = document.getElementById('plan-options');
+            planOptionsDiv.innerHTML = '';
+
+            for (let i = 0; i < Math.ceil(duration); i++) {
+                const hour = enterHour + i;
+                const plan1Id = `plan1-${hour}`;
+                const plan2Id = `plan2-${hour}`;
+
+                const planOptionHTML = `
+                    <div>
+                        <p>${hour}時 - ${hour + 1}時</p>
+                        <input type="radio" name="plan-${hour}" id="${plan1Id}" value="plan1">
+                        <label for="${plan1Id}">ソフドリ (1500円)</label>
+                        <input type="radio" name="plan-${hour}" id="${plan2Id}" value="plan2">
+                        <label for="${plan2Id}">アルコール (2500円)</label>
+                    </div>
+                `;
+                planOptionsDiv.innerHTML += planOptionHTML;
+            }
+        }
+
+        function calculateTotal() {
+            // プラン料金の計算
+            const planOptionsDiv = document.getElementById('plan-options');
+            const planInputs = planOptionsDiv.querySelectorAll('input[type="radio"]:checked');
+
+            if (planInputs.length === 0) {
+                alert('プランを選択してください');
+                return;
+            }
+
+            let fee = 500;
+            planInputs.forEach(input => {
+                if (input.value === 'plan1') {
+                    fee += 1500;
+                } else if (input.value === 'plan2') {
+                    fee += 2500;
+                }
+            });
+
+            // 商品の総額計算
+            let total = fee;
+            for (let i = 1; i <= 10; i++) {
+                const price = parseFloat(document.getElementById(`order${i}-price`).value);
+                const count = parseInt(document.getElementById(`order${i}-count`).value);
+
+                if (!isNaN(price) && !isNaN(count)) {
+                    total += price * count;
+                }
+            }
+
+            document.getElementById('total').innerText = `総額: ${total}円`;
+        }
+        function resetForm() {
+            document.getElementById('entershop-hour').value = '';
+            document.getElementById('entershop-minute').value = '';
+            document.getElementById('leavestore-hour').value = '';
+            document.getElementById('leavestore-minute').value = '';
+            document.getElementById('plan-options').innerHTML = '';
+            document.getElementById('total').innerText = '総額: 0円';
+
+            for (let i = 1; i <= 10; i++) {
+                document.getElementById(`order${i}-price`).value = '';
+                document.getElementById(`order${i}-count`).value = '';
+            }
+        }
+    </script>
+</body>
+</html>
