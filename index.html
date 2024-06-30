@@ -167,11 +167,11 @@
             if (isNaN(leaveMinute)) {
                 leaveMinute = 0;
             }
-             if (enterMinute < 0 || enterMinute > 59) {
+             if (enterMinute > 59) {
                 alert('入館時間の分は0から59の間で入力してください');
                 return;
             }
-            if (leaveMinute < 0 || leaveMinute > 59) {
+            if (leaveMinute > 59) {
                 alert('出館時間の分は0から59の間で入力してください');
                 return;
             }
