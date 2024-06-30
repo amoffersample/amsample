@@ -188,20 +188,17 @@
             const planOptionsDiv = document.getElementById('plan-options');
             planOptionsDiv.innerHTML = '';
 
-             for (let i = 0; i < Math.ceil(duration); i++) {
-                const currentHour = Math.floor((enterTime + i * 60) / 60);
-                const currentMinute = (enterTime + i * 60) % 60;
-                const nextHour = Math.floor((enterTime + (i + 1) * 60) / 60);
-                const nextMinute = (enterTime + (i + 1) * 60) % 60;
-                const plan1Id = `plan1-${currentHour}-${currentMinute}`;
-                const plan2Id = `plan2-${currentHour}-${currentMinute}`;
+              for (let i = 0; i < Math.ceil(duration); i++) {
+                const hour = enterHour + i;
+                const plan1Id = `plan1-${hour}`;
+                const plan2Id = `plan2-${hour}`;
 
                 const planOptionHTML = `
                     <div>
-                        <p>${currentHour}時${currentMinute}分 - ${nextHour}時${nextMinute}分</p>
-                        <input type="radio" name="plan-${currentHour}-${currentMinute}" id="${plan1Id}" value="plan1">
+                        <p>${i+1}時間目</p>
+                        <input type="radio" name="plan-${hour}" id="${plan1Id}" value="plan1">
                         <label for="${plan1Id}">ソフドリ (1500円)</label>
-                        <input type="radio" name="plan-${currentHour}-${currentMinute}" id="${plan2Id}" value="plan2">
+                        <input type="radio" name="plan-${hour}" id="${plan2Id}" value="plan2">
                         <label for="${plan2Id}">アルコール (2500円)</label>
                     </div>
                 `;
